@@ -1,20 +1,51 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from datetime import date
+
+CATEGORIES = [
+    ('MKT', 'Marketing'),
+    ('P3D', '3D Printing'),
+    ('FPV', 'FPV Drones'),
+    ('WII', 'Portables'),
+    ('WEB', 'Web Development'),
+    ('COD', 'Other Coding'),
+    ("OEE", 'Other Electronics'),
+    ('SKI', 'Outdoors'),
+    ('STZ', 'Style'),
+    ('KID', 'Kids'),
+]
 
 
-STATUS = ((0, "Draft"), (1, "Publish"))
+class Category(models.Model):
+
+    name = models.CharField(choices=CATEGORIES, max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("home")
 
 
 class Post(models.Model):
+
+    STATUS = [('D', 'Draft'), ('P', 'Publish')]
+
+    FEATURED = [('P', 'Primary'), ('S', 'Secondary'), ('N', 'Not Featured')]
+
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
+    preview = models.CharField(max_length=255)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="blog_posts"
     )
-    updated_on = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(choices=STATUS, default=0)
+    created_on = models.DateTimeField(default=date.today)
+    featured = models.CharField(max_length=1, choices=FEATURED, default='N')
+    status = models.CharField(max_length=1, choices=STATUS, default='D')
+    category = models.CharField(max_length=200, choices=CATEGORIES, default='WEB')
+    image = models.ImageField(blank=True)
 
     class Meta:
         ordering = ["-created_on"]
@@ -23,8 +54,6 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        from django.urls import reverse
-
         return reverse("post_detail", kwargs={"slug": str(self.slug)})
 
 

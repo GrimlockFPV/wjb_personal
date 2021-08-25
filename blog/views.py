@@ -1,22 +1,22 @@
 from django.views import generic
-from .models import Post
+from .models import Post, Category
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404
 
 
 class PostList(generic.ListView):
-    queryset = Post.objects.filter(status=1).order_by("-created_on")
-    template_name = "index.html"
+    queryset = Post.objects.filter(status='P').order_by("-created_on")
+    template_name = "blog.html"
     paginate_by = 3
 
 
-# class PostDetail(generic.DetailView):
-#     model = Post
-#     template_name = 'post_detail.html'
+def CategoryList(request, cats):
+    category_post = Post.objects.filter(category=cats)
+    return render(request, 'blog_category.html', {'cats': cats.title()}, {'category_posts': category_post})
 
 
-def post_detail(request, slug):
-    template_name = "post_detail.html"
+def PostDetail(request, slug):
+    template_name = "blog_detail.html"
     post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(active=True).order_by("-created_on")
     new_comment = None
