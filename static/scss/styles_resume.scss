@@ -1,0 +1,16 @@
+// Import custom variables and override default Bootstrap variables
+@import "./variables.scss";
+
+// Import Bootstrap
+@import "../bootstrap/scss/bootstrap.scss";
+
+// Import custom styles
+@import "./global_resume.scss";
+
+// Resume Components
+@import "./components/sidenav.scss";
+@import "./components/icons.scss";
+
+// Resume Sections
+@import "./sections/resume-section.scss";
+
