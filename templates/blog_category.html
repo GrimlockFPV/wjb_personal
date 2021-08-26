@@ -1,13 +1,85 @@
 {% extends 'base_blog.html' %}
 {% block content %}
 
-<div class="container">
-    <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-            <div class="text-left">
-                <a class="blog-header-logo text-dark" href="#">{{ cats }}</a>
+    <div class="container">
+        <header class="blog-header py-3">
+            <div class="row flex-nowrap justify-content-between align-items-center">
+                <div class="text-left">
+                    <a class="blog-header-logo text-dark" href="#">GrimlockFPV on {{ cats.get_name_display }}</a>
+                </div>
+            </div>
+        </header>
+        {% include 'blog_nav.html' %}
+    </div>
+<main class="container">
+    {% for post in post_list %}
+        {% if post.featured == 'P' %}
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+                <div class="col-md-6 px-0">
+                    <h1 class="display-4 fst-italic">{{ post.title }}</h1>
+                    <p class="lead my-3">{{ post.preview }}</p>
+                    <p class="lead mb-0"><a href="{% url 'blog:post_detail' post.slug  %}" class="text-white fw-bold">Continue
+                        reading...</a></p>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    {% for post in category_posts %}
+    {% if post.featured == 'S' %}
+        {% if forloop.first %}
+            <div class="row mb-2">
+        {% endif %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{ post.get_category_display }}</strong>
+                    <h3 class="mb-0">{{ post.title }}</h3>
+                    <div class="mb-1 text-muted">{{ post.created_on }}</div>
+                    <p class="card-text mb-auto">{{ post.preview }}</p>
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="stretched-link">Continue reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                         role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                         focusable="false"><title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                    </svg>
+                </div>
             </div>
         </div>
-    </header>
-{% include blog_nav.html %}
-</div>
+    {% endif %}
+        {% if forloop.counter|divisibleby:2 %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="row g-5">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 fst-italic border-bottom">
+                From the Firehose
+            </h3>
+            {% for post in category_posts %}
+                    <article class="blog-post">
+                        <h2 class="blog-post-title">{{ post.title }}</h2>
+                        <p class="blog-post-meta">{{ post.created_on }}</p>
+                        <p>{{ post.content|safe }}</p>
+                    </article>
+            {% endfor %}
+            {% if is_paginated %}
+                <nav class="blog-pagination" aria-label="Pagination">
+                    {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">Older</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a class="btn btn-outline-secondary disabled" href="?page={{ page_obj.next_page_number }}" tabindex="-1"
+                       aria-disabled="true">Newer</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        </div>
+        {% include 'sidebar.html' %}
+    </div>
+</main>
+
+{% endblock content %}

@@ -1,15 +1,7 @@
 <div class="nav-scroller py-1 mb-2">
     <nav class="nav d-flex justify-content-between">
-        <a class="p-2 link-secondary" href="/blog/Marketing/">Marketing</a>
-        <a class="p-2 link-secondary" href="/blog/3D-Printing/">3D Printing</a>
-        <a class="p-2 link-secondary" href="/blog/FPV-Drones/">FPV Drones/</a>
-        <a class="p-2 link-secondary" href="/blog/Portablizing/">Portablizing</a>
-        <a class="p-2 link-secondary" href="/blog/Web-Development/">Web Development</a>
-        <a class="p-2 link-secondary" href="/blog/Other-Coding/">Other Coding</a>
-        <a class="p-2 link-secondary" href="/blog/Other-Electronics/">Other Electronics</a>
-        <a class="p-2 link-secondary" href="/blog/Outdoors/">Outdoors</a>
-        <a class="p-2 link-secondary" href="/blog/Style/">Style</a>
-        <a class="p-2 link-secondary" href="/blog/Travel/">Travel</a>
-        <a class="p-2 link-secondary" href="/blog/Kids/">Kids</a>
+        {% for category in category_list %}
+            <a class="p-2 link-secondary" href="{% url 'blog:category' category %}">{{ category.get_name_display }}</a>
+        {% endfor %}
     </nav>
 </div>

@@ -32,7 +32,7 @@ class Post(models.Model):
 
     STATUS = [('D', 'Draft'), ('P', 'Publish')]
 
-    FEATURED = [('P', 'Primary'), ('S', 'Secondary'), ('N', 'Not Featured')]
+    FEATURED = [('P', 'Primary'), ('S', 'Secondary')]
 
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
@@ -41,8 +41,8 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name="blog_posts"
     )
     content = models.TextField()
-    created_on = models.DateTimeField(default=date.today)
-    featured = models.CharField(max_length=1, choices=FEATURED, default='N')
+    created_on = models.DateField(default=date.today)
+    featured = models.CharField(max_length=1, choices=FEATURED, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default='D')
     category = models.CharField(max_length=200, choices=CATEGORIES, default='WEB')
     image = models.ImageField(blank=True)

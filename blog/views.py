@@ -6,13 +6,15 @@ from django.shortcuts import render, get_object_or_404
 
 class PostList(generic.ListView):
     queryset = Post.objects.filter(status='P').order_by("-created_on")
+    extra_context = {'category_list': Category.objects.all()}
     template_name = "blog.html"
     paginate_by = 3
 
 
 def CategoryList(request, cats):
     category_post = Post.objects.filter(category=cats)
-    return render(request, 'blog_category.html', {'cats': cats.title()}, {'category_posts': category_post})
+    category_name = get_object_or_404(Category, name=cats)
+    return render(request, 'blog_category.html', {'cats': category_name, 'category_posts': category_post, 'category_list': Category.objects.all()})
 
 
 def PostDetail(request, slug):
