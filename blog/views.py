@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 
 
 class PostList(generic.ListView):
-    queryset = Post.objects.filter(status='P').order_by("-created_on")
+    queryset = Post.objects.all()#.order_by("-created_on")
     extra_context = {'category_list': Category.objects.all()}
     template_name = "blog.html"
     paginate_by = 3
