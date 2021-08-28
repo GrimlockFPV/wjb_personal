@@ -1,1 +1,1 @@
-web: gunicorn wjb_personal.wsgi
+web: gunicorn wjb_personal.wsgi --log-file -
