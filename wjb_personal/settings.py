@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 import django_heroku
 import dj_database_url
 from decouple import config
@@ -19,7 +20,6 @@ from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -65,10 +65,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'wjb_personal.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': str(BASE_DIR / 'templates'),
+        'DIRS': TEMPLATES_DIR,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,10 +89,12 @@ WSGI_APPLICATION = 'wjb_personal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DATABASE_DIR = os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'NAME': DATABASE_DIR,
     }
 }
 
@@ -98,7 +102,8 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS = [#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -136,7 +141,7 @@ COMPRESS_PRECOMPILERS = (
 )
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static"
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 STATICFILES_FINDERS = [
