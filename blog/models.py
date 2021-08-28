@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from datetime import date
+from django.utils import timezone
 
 CATEGORIES = [
     ('MKT', 'Marketing'),
@@ -12,7 +12,7 @@ CATEGORIES = [
     ('COD', 'Other Coding'),
     ("OEE", 'Other Electronics'),
     ('SKI', 'Outdoors'),
-    ('STZ', 'Style'),
+    ('SPT', 'Sports'),
     ('KID', 'Kids'),
 ]
 
@@ -41,7 +41,7 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name="blog_posts"
     )
     content = models.TextField()
-    created_on = models.DateField(default=date.today)
+    created_on = models.DateTimeField(default=timezone.now)
     featured = models.CharField(max_length=1, choices=FEATURED, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default='D')
     category = models.CharField(max_length=200, choices=CATEGORIES, default='WEB')
